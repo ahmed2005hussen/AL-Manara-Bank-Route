@@ -1,25 +1,70 @@
-public class FixedDepositAccount extends Account{
+public class FixedDepositAccount extends Account {
 
+    private double interestRate;
+    private int durationMonths;
+    private int monthsPassed;
 
+    public FixedDepositAccount(Customer owner, double balance, AccountStatus accountStatus, double interestRate, int durationMonths) {
+        super(owner, balance, accountStatus);
+        this.interestRate = interestRate;
+        setDurationMonths(durationMonths);
+        this.monthsPassed = 0;
+    }
 
+    public double getInterestRate() {
+        return interestRate;
+    }
 
+    public void setInterestRate(double interestRate) {
+        if (interestRate >= 0) {
+            this.interestRate = interestRate;
 
+        }
+    }
 
+    public int getDurationMonths() {
+        return durationMonths;
+    }
+
+    public void setDurationMonths(int durationMonths) {
+        if (durationMonths > 0) {
+            this.durationMonths = durationMonths;
+        }
+    }
+
+    public int getMonthsPassed() {
+        return monthsPassed;
+    }
+
+    public void passOneMonth() {
+        if (!isMature()) monthsPassed++;
+    }
+
+    public boolean isMature() {
+        return monthsPassed >= durationMonths;
+    }
+
+    public int getRemainingMonths() {
+        if (isMature()) {
+            return 0;
+        }
+        return durationMonths - monthsPassed;
+    }
 
     @Override
     public boolean withdraw(double amount) {
-        return false;
+        if (getAccountStatus() != AccountStatus.ACTIVE || amount <= 0 || !isMature() || amount > getBalance()) {
+            return false;
+        }
+
+        setBalance(getBalance() - amount);
+        incrementTransactionCount();
+        return true;
     }
 
-
-    //A fixed deposit is money placed in the bank for a specified number of months.
-    //• The account has an interest rate.
-    //• The account has a duration in months.
-    //• The system tracks how many months have passed.
-    //• Money cannot be withdrawn before the account reaches maturity.
-    //• If a withdrawal is attempted too early, the program must reject it and show how many months remain.
-    //• After the maturity period is reached, withdrawal is allowed according to the account's rules.
-
-
+    @Override
+    public String toString() {
+        return super.toString() + "\nInterest Rate     : " + interestRate + "%" + "\nDuration Months   : " + durationMonths + "\nMonths Passed     : " + monthsPassed + "\nMonths Remaining  : " + getRemainingMonths() + "\nMature           : " + (isMature() ? "Yes" : "No");
+    }
 
 }
