@@ -1,4 +1,15 @@
-public class FixedDepositAccount {
+public class FixedDepositAccount extends Account{
+
+
+
+
+
+
+
+    @Override
+    public boolean withdraw(double amount) {
+        return false;
+    }
 
 
     //A fixed deposit is money placed in the bank for a specified number of months.

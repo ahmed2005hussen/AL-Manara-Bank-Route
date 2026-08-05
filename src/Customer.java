@@ -1,40 +1,33 @@
-import java.util.Arrays;
-import java.util.List;
-
 public class Customer {
 
     private int customerId;
     private String fullName;
     private String nationalId;
-    private String phoneNubmer;
+    private String phoneNumber;
     private CustomerTiers customerTiers;
     private Account[] accounts;
-    private static int count = 0;
-    private static int i = 0;
 
-    public Customer(String fullName, String nationalId, String phoneNubmer, CustomerTiers customerTiers) {
+    private static int nextCustomerNumber = 0;
+    private int accountCount;
+    private static final int MAX_ACCOUNTS = 10;
+
+
+    public Customer(String fullName, String nationalId, String phoneNumber, CustomerTiers customerTiers) {
         this.fullName = fullName;
         this.nationalId = nationalId;
-        this.phoneNubmer = phoneNubmer;
+        this.phoneNumber = phoneNumber;
         this.customerTiers = customerTiers;
         customerId = generateId();
-        accounts = new Account[10];
-
+        accounts = new Account[MAX_ACCOUNTS];
     }
-
 
     public Customer(String fullName, String nationalId, CustomerTiers customerTiers) {
-        this.fullName = fullName;
-        this.nationalId = nationalId;
-        this.customerTiers = customerTiers;
-        phoneNubmer = "Not obtain";
-        customerId = generateId();
-        accounts = new Account[10];
+        this(fullName , nationalId, "-" ,customerTiers );
     }
 
 
-    public int generateId() {
-        return count++;
+    private static int generateId() {
+        return nextCustomerNumber++;
     }
 
     public String getFullName() {
@@ -45,6 +38,10 @@ public class Customer {
         this.fullName = fullName;
     }
 
+    public int getCustomerId() {
+        return customerId;
+    }
+
     public String getNationalId() {
         return nationalId;
     }
@@ -53,12 +50,12 @@ public class Customer {
         this.nationalId = nationalId;
     }
 
-    public String getPhoneNubmer() {
-        return phoneNubmer;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhoneNubmer(String phoneNubmer) {
-        this.phoneNubmer = phoneNubmer;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public CustomerTiers getCustomerTiers() {
@@ -74,21 +71,23 @@ public class Customer {
     }
 
     public void addAccount(Account a) {
-        if (i == 10) return;
-        accounts[i++] = a;
+        if (accountCount == MAX_ACCOUNTS) return;
+        accounts[accountCount++] = a;
     }
 
     @Override
     public String toString() {
-        return "Customer{" +
-                "customerId=" + customerId +
-                ", fullName='" + fullName + '\'' +
-                ", nationalId='" + nationalId + '\'' +
-                ", phoneNubmer='" + phoneNubmer + '\'' +
-                ", customerTiers=" + customerTiers +
-                ", accounts=" + Arrays.toString(accounts) +
-                '}';
+        return "==============================\n" +
+                "Customer ID      : " + customerId + "\n" +
+                "Full Name        : " + fullName + "\n" +
+                "National ID      : " + nationalId + "\n" +
+                "Phone Number     : " + phoneNumber + "\n" +
+                "Customer Tier    : " + customerTiers + "\n" +
+                "Accounts Count   : " + accountCount + "\n" +
+                "==============================";
     }
+
+
     //The system generates a unique customer ID.
     // The customer ID must never be typed manually by the employee.
 }
