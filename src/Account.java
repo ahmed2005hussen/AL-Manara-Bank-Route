@@ -6,6 +6,7 @@ public abstract class Account {
     private AccountStatus accountStatus;
     private int transactionCount;
     protected static int nextAccountNumber = 0;
+    private double minDeposite;
 
     private static int generateId() {
         return nextAccountNumber++;
@@ -15,12 +16,13 @@ public abstract class Account {
     public Account() {
     }
 
-    public Account(Customer owner, double balance, AccountStatus accountStatus) {
+    public Account(Customer owner, double balance, AccountStatus accountStatus , double minDeposite) {
         this.balance = balance;
         this.owner = owner;
         this.accountStatus = accountStatus;
         accountNumber = generateId();
         this.transactionCount = 0;
+        this.minDeposite = minDeposite;
     }
 
     public int getAccountNumber() {
@@ -59,8 +61,13 @@ public abstract class Account {
         transactionCount++;
     }
 
+    public double getMinDeposite() {
+        return minDeposite;
+    }
+
+
     public boolean deposit(double amount) {
-        if (amount >= 0 && accountStatus == AccountStatus.ACTIVE) {
+        if (amount >= 0 && accountStatus == AccountStatus.ACTIVE && minDeposite <= amount) {
             setBalance(getBalance() + amount);
             incrementTransactionCount();
             return true;

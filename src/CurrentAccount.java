@@ -1,9 +1,9 @@
 public class CurrentAccount extends Account {
 
     private static final double OVERDRAFT_LIMIT = 1000;
-
+    private static final double MIN_TRANSACTION = 10;
     public CurrentAccount(Customer owner, double balance, AccountStatus accountStatus) {
-        super(owner, balance, accountStatus);
+        super(owner, balance, accountStatus , MIN_TRANSACTION);
     }
 
     @Override

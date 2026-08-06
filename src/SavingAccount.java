@@ -2,11 +2,12 @@ public class SavingAccount extends Account {
 
     private double annualInterestRate;
     private int monthlyWithdrawCount;
+    private static final double MIN_TRANSACTION = 10;
 
 
     public SavingAccount(Customer owner, double balance, AccountStatus accountStatus,
                          double annualInterestRate) {
-        super(owner, balance, accountStatus);
+        super(owner, balance, accountStatus, MIN_TRANSACTION);
         this.annualInterestRate = annualInterestRate;
         this.monthlyWithdrawCount = 0;
     }

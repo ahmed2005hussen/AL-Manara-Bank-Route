@@ -3,9 +3,10 @@ public class FixedDepositAccount extends Account {
     private double interestRate;
     private int durationMonths;
     private int monthsPassed;
+    private static final double MIN_TRANSACTION = 10;
 
     public FixedDepositAccount(Customer owner, double balance, AccountStatus accountStatus, double interestRate, int durationMonths) {
-        super(owner, balance, accountStatus);
+        super(owner, balance, accountStatus, MIN_TRANSACTION);
         this.interestRate = interestRate;
         setDurationMonths(durationMonths);
         this.monthsPassed = 0;

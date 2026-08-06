@@ -47,10 +47,19 @@ public class Bank {
         return customer;
     }
 
-    public Customer findById(int customerId) {
+    public Customer findCustomerById(int customerId) {
         for (Customer c : customers) {
             if (c != null && c.getCustomerId() == customerId) {
                 return c;
+            }
+        }
+        return null;
+    }
+
+    public Account findAccountById(int accountId) {
+        for (Account a : accounts) {
+            if (a != null && a.getAccountNumber() == accountId) {
+                return a;
             }
         }
         return null;

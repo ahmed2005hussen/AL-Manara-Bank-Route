@@ -134,6 +134,36 @@ public class Main {
     }
 
 
+    public double getBalance(double minValue) {
+        double balance;
+        do {
+            System.out.print("Enter Your balance: ");
+            balance = sc.nextDouble();
+            sc.nextLine();
+
+            if (balance > 0 && minValue <= balance) {
+                return balance;
+            }
+
+            System.out.println("Balance Should be greater than: " + minValue);
+            System.out.println("Do you want to enter another value? ");
+            System.out.println("1. yes ");
+            System.out.println("2. No");
+            System.out.print("Enter your choice 1 or 2: ");
+            int flag = sc.nextInt();
+            sc.nextLine();
+            if (flag == 1) {
+                continue;
+            }
+            if (flag == 2) {
+                return -1;
+            }
+            System.out.println("Invalid input enter 1 or 2 ");
+
+        } while (true);
+
+    }
+
     public void openAccount() {
 
         if (!Bank.isTherePlaceAccount()) {
@@ -146,7 +176,7 @@ public class Main {
         int id = sc.nextInt();
         sc.nextLine();
 
-        Customer c = manaraBank.findById(id);
+        Customer c = manaraBank.findCustomerById(id);
         if (c == null) {
             System.out.println("Customer ID does not exist ");
             System.out.println("---------------------------");
@@ -177,34 +207,12 @@ public class Main {
 
 
         if (choice == 1) {
-            double balance;
-            do {
-                System.out.print("Enter Your balance: ");
-                balance = sc.nextDouble();
-                sc.nextLine();
-
-                if (balance > 0 && Bank.SAVING_MIN <= balance) {
-                    break;
-                }
-
-                System.out.println("Balance Should be greater than: " + Bank.SAVING_MIN);
-                System.out.println("Do you want to enter another value? ");
-                System.out.println("1. yes ");
-                System.out.println("2. No");
-                System.out.print("Enter your choice 1 or 2: ");
-                int flag = sc.nextInt();
-                sc.nextLine();
-                if (flag == 1) {
-                    continue;
-                }
-                if (flag == 2) {
-                    System.out.println("Thank You :)");
-                    System.out.println("------------");
-                    return;
-                }
-                System.out.println("Invalid input enter 1 or 2 ");
-
-            } while (true);
+            double balance = getBalance(Bank.SAVING_MIN);
+            if (balance == -1) {
+                System.out.println("Thank You :)");
+                System.out.println("------------");
+                return;
+            }
 
             double annual = 0;
             do {
@@ -220,35 +228,12 @@ public class Main {
 
         } else if (choice == 2) {
 
-            double balance;
-            do {
-                System.out.print("Enter Your balance: ");
-                balance = sc.nextDouble();
-                sc.nextLine();
-
-                if (balance > 0 && Bank.CURRENT_MIN <= balance) {
-                    break;
-                }
-
-                System.out.println("Balance Should be greater than: " + Bank.CURRENT_MIN);
-                System.out.println("Do you want to enter another value? ");
-                System.out.println("1. yes ");
-                System.out.println("2. No");
-                System.out.print("Enter your choice 1 or 2: ");
-                int flag = sc.nextInt();
-                sc.nextLine();
-                if (flag == 1) {
-                    continue;
-                }
-                if (flag == 2) {
-                    System.out.println("Thank You :)");
-                    System.out.println("------------");
-                    return;
-                }
-                System.out.println("Invalid input enter 1 or 2 ");
-
-            } while (true);
-
+            double balance = getBalance(Bank.CURRENT_MIN);
+            if (balance == -1) {
+                System.out.println("Thank You :)");
+                System.out.println("------------");
+                return;
+            }
             Account account = new CurrentAccount(c, balance, AccountStatus.ACTIVE);
 
             System.out.println("Add successfully: ");
@@ -256,34 +241,12 @@ public class Main {
 
         } else {
 
-            double balance;
-            do {
-                System.out.print("Enter Your balance: ");
-                balance = sc.nextDouble();
-                sc.nextLine();
-
-                if (balance > 0 && Bank.FIXED_MIN <= balance) {
-                    break;
-                }
-
-                System.out.println("Balance Should be greater than: " + Bank.FIXED_MIN);
-                System.out.println("Do you want to enter another value? ");
-                System.out.println("1. yes ");
-                System.out.println("2. No");
-                System.out.print("Enter your choice 1 or 2: ");
-                int flag = sc.nextInt();
-                sc.nextLine();
-                if (flag == 1) {
-                    continue;
-                }
-                if (flag == 2) {
-                    System.out.println("Thank You :)");
-                    System.out.println("------------");
-                    return;
-                }
-                System.out.println("Invalid input enter 1 or 2 ");
-
-            } while (true);
+            double balance = getBalance(Bank.FIXED_MIN);
+            if (balance == -1) {
+                System.out.println("Thank You :)");
+                System.out.println("------------");
+                return;
+            }
 
             double interestRate = 0;
             do {
@@ -306,6 +269,51 @@ public class Main {
 
     }
 
+    public void deposit() {
+
+        System.out.print("Enter Account Id: ");
+        int accountID = sc.nextInt();
+        sc.nextLine();
+
+        Account a = manaraBank.findAccountById(accountID);
+        if (a == null) {
+            System.out.println("Account Does not exit");
+            System.out.println("-----------------------");
+            return;
+        }
+
+        System.out.print("Enter amount: ");
+        double amount = sc.nextDouble();
+        sc.nextLine();
+        if (amount <= 0) {
+            System.out.println("Invalid amount should be grater than 0");
+            System.out.println("---------------------------------------");
+            return;
+        }
+
+        if (a.getAccountStatus() != AccountStatus.ACTIVE) {
+            System.out.println("This acount is not active to deposit");
+            System.out.println("---------------------------------------");
+            return;
+        }
+
+        double current = a.getBalance();
+
+        boolean isDone = a.deposit(amount);
+
+        if (isDone) {
+            System.out.println("Deposit Done successfully");
+            System.out.println("Current balance = $" + current +
+                    " Deposit = $" + amount + " New balance = $" + a.getBalance());
+            System.out.println("------------------------");
+            return;
+        }
+        System.out.println("Transaction failed");
+        System.out.println("You should deposit more than or equal: " + a.getMinDeposite());
+        System.out.println("-------------------------------------------");
+    }
+
+
     void main(String[] args) {
         System.out.println("Welcome in our bank");
         System.out.println("-------------------");
@@ -325,7 +333,7 @@ public class Main {
 
                 case 2 -> openAccount();
 
-//                case 3 ->
+                case 3 -> deposit();
             }
         }
 
