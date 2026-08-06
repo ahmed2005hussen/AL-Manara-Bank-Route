@@ -1,13 +1,13 @@
 public class Bank {
-    private static Customer[] customers;
-    private static Account[] accounts;
+    private  Customer[] customers;
+    private  Account[] accounts;
 
     public static final double SAVING_MIN = 500;
     public static final double CURRENT_MIN = 1000;
     public static final double FIXED_MIN = 5000;
 
-    private static int numberOfCustomers = 0;
-    private static int numberOfAccounts = 0;
+    private  int numberOfCustomers = 0;
+    private  int numberOfAccounts = 0;
 
     private final static int CUSTOMERS_CAPACITY = 20;
 
@@ -19,15 +19,15 @@ public class Bank {
         accounts = new Account[ACCOUNTS_CAPACITY];
     }
 
-    public static boolean isTherePlaceCustomer() {
+    public  boolean isTherePlaceCustomer() {
         return numberOfCustomers < CUSTOMERS_CAPACITY;
     }
 
-    public static boolean isTherePlaceAccount() {
+    public  boolean isTherePlaceAccount() {
         return numberOfAccounts < ACCOUNTS_CAPACITY;
     }
 
-    public static boolean isUniqueNationalId(String id) {
+    public  boolean isUniqueNationalId(String id) {
 
         for (Customer c : customers) {
             if (c != null && c.getNationalId().equals(id)) {
@@ -70,6 +70,69 @@ public class Bank {
         a.setOwner(c);
         accounts[numberOfAccounts++] = a;
         return a;
+    }
+
+    public void printCustomerAccounts(int id) {
+        Customer c = findCustomerById(id);
+
+        if (c == null) {
+            System.out.println("Customer does not exist");
+            return;
+        }
+
+        System.out.println(c);
+
+        int count = 0;
+        double totalBalance = 0;
+        for (Account a : c.getAccounts()) {
+            if (a != null) {
+                count++;
+                System.out.println(count + ". " + a);
+                totalBalance += a.getBalance();
+            }
+        }
+        if (count == 0) {
+            System.out.println("have no accounts");
+            return;
+        }
+        System.out.println("His total balance: " + totalBalance);
+
+    }
+
+    public void displayAccountsByType(Class<?> type) {
+
+        int count = 0;
+        double totalBalance = 0;
+
+        for (Account account : accounts) {
+
+            if (account != null && type.isInstance(account)) {
+
+                System.out.println(account);
+                System.out.println("----------------------------");
+
+                count++;
+                totalBalance += account.getBalance();
+            }
+        }
+
+        System.out.println("Number of Accounts : " + count);
+        System.out.println("Total Balance      : " + totalBalance);
+    }
+
+    public void displayAllBranchAccounts() {
+        System.out.println("Accounts: ");
+
+        if (numberOfAccounts == 0) {
+            System.out.println("this branch have no accounts");
+            return;
+        }
+        for (Account a : accounts) {
+            if (a != null) {
+                System.out.println(a);
+            }
+        }
+
     }
 
 }

@@ -67,7 +67,7 @@ public abstract class Account {
 
 
     public boolean deposit(double amount) {
-        if (amount >= 0 && accountStatus == AccountStatus.ACTIVE && minDeposite <= amount) {
+        if (amount > 0 && accountStatus == AccountStatus.ACTIVE && minDeposite <= amount) {
             setBalance(getBalance() + amount);
             incrementTransactionCount();
             return true;
