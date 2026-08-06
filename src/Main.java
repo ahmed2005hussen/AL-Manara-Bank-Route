@@ -40,6 +40,13 @@ public class Main {
     }
 
     public void registerCustomer() {
+
+        if (!Bank.isTherePlaceCustomer()) {
+            System.out.println("Sorry now our capacity if full");
+            System.out.println("-------------------------------");
+            return;
+        }
+
         System.out.print("Enter the Customer full name: ");
 
         String fullName = sc.nextLine();
@@ -127,6 +134,178 @@ public class Main {
     }
 
 
+    public void openAccount() {
+
+        if (!Bank.isTherePlaceAccount()) {
+            System.out.println("Sorry now our capacity if full");
+            System.out.println("-------------------------------");
+            return;
+        }
+
+        System.out.print("Enter Customer id: ");
+        int id = sc.nextInt();
+        sc.nextLine();
+
+        Customer c = manaraBank.findById(id);
+        if (c == null) {
+            System.out.println("Customer ID does not exist ");
+            System.out.println("---------------------------");
+            return;
+        }
+
+        if (!c.canAddMoreAccounts()) {
+            System.out.println("This customer can not open more account, reach to the limit");
+            System.out.println("-----------------------------------------------------------");
+            return;
+        }
+
+        int choice = 0;
+        do {
+            System.out.println("Account Type");
+            System.out.println("1. Saving Account");
+            System.out.println("2. Current Account");
+            System.out.println("3. Fixed Deposit Account");
+            System.out.print("Enter Your choice: ");
+            choice = sc.nextInt();
+            sc.nextLine();
+            if (choice <= 0 || choice > 3) {
+                System.out.println("Invalid Input try number between 1 - 3");
+                continue;
+            }
+            break;
+        } while (true);
+
+
+        if (choice == 1) {
+            double balance;
+            do {
+                System.out.print("Enter Your balance: ");
+                balance = sc.nextDouble();
+                sc.nextLine();
+
+                if (balance > 0 && Bank.SAVING_MIN <= balance) {
+                    break;
+                }
+
+                System.out.println("Balance Should be greater than: " + Bank.SAVING_MIN);
+                System.out.println("Do you want to enter another value? ");
+                System.out.println("1. yes ");
+                System.out.println("2. No");
+                System.out.print("Enter your choice 1 or 2: ");
+                int flag = sc.nextInt();
+                sc.nextLine();
+                if (flag == 1) {
+                    continue;
+                }
+                if (flag == 2) {
+                    System.out.println("Thank You :)");
+                    System.out.println("------------");
+                    return;
+                }
+                System.out.println("Invalid input enter 1 or 2 ");
+
+            } while (true);
+
+            double annual = 0;
+            do {
+                System.out.print("Enter Annual Interest Rate: ");
+                annual = sc.nextDouble();
+                sc.nextLine();
+            } while (annual < 0);
+
+            Account account = new SavingAccount(c, balance, AccountStatus.ACTIVE, annual);
+
+            System.out.println("Add successfully: ");
+            System.out.println(manaraBank.openAccount(c, account));
+
+        } else if (choice == 2) {
+
+            double balance;
+            do {
+                System.out.print("Enter Your balance: ");
+                balance = sc.nextDouble();
+                sc.nextLine();
+
+                if (balance > 0 && Bank.CURRENT_MIN <= balance) {
+                    break;
+                }
+
+                System.out.println("Balance Should be greater than: " + Bank.CURRENT_MIN);
+                System.out.println("Do you want to enter another value? ");
+                System.out.println("1. yes ");
+                System.out.println("2. No");
+                System.out.print("Enter your choice 1 or 2: ");
+                int flag = sc.nextInt();
+                sc.nextLine();
+                if (flag == 1) {
+                    continue;
+                }
+                if (flag == 2) {
+                    System.out.println("Thank You :)");
+                    System.out.println("------------");
+                    return;
+                }
+                System.out.println("Invalid input enter 1 or 2 ");
+
+            } while (true);
+
+            Account account = new CurrentAccount(c, balance, AccountStatus.ACTIVE);
+
+            System.out.println("Add successfully: ");
+            System.out.println(manaraBank.openAccount(c, account));
+
+        } else {
+
+            double balance;
+            do {
+                System.out.print("Enter Your balance: ");
+                balance = sc.nextDouble();
+                sc.nextLine();
+
+                if (balance > 0 && Bank.FIXED_MIN <= balance) {
+                    break;
+                }
+
+                System.out.println("Balance Should be greater than: " + Bank.FIXED_MIN);
+                System.out.println("Do you want to enter another value? ");
+                System.out.println("1. yes ");
+                System.out.println("2. No");
+                System.out.print("Enter your choice 1 or 2: ");
+                int flag = sc.nextInt();
+                sc.nextLine();
+                if (flag == 1) {
+                    continue;
+                }
+                if (flag == 2) {
+                    System.out.println("Thank You :)");
+                    System.out.println("------------");
+                    return;
+                }
+                System.out.println("Invalid input enter 1 or 2 ");
+
+            } while (true);
+
+            double interestRate = 0;
+            do {
+                System.out.print("Enter Annual Interest Rate: ");
+                interestRate = sc.nextDouble();
+                sc.nextLine();
+            } while (interestRate < 0);
+
+            System.out.print("Enter Duration Months: ");
+            int druationMonths = sc.nextInt();
+            sc.nextLine();
+
+            Account account = new FixedDepositAccount(c, balance, AccountStatus.ACTIVE, interestRate, druationMonths);
+
+            System.out.println("Add successfully: ");
+            System.out.println(manaraBank.openAccount(c, account));
+        }
+
+        System.out.println("-------------------------------");
+
+    }
+
     void main(String[] args) {
         System.out.println("Welcome in our bank");
         System.out.println("-------------------");
@@ -144,6 +323,9 @@ public class Main {
 
                 case 1 -> registerCustomer();
 
+                case 2 -> openAccount();
+
+//                case 3 ->
             }
         }
 

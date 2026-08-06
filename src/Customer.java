@@ -21,6 +21,10 @@ public class Customer {
         accounts = new Account[MAX_ACCOUNTS];
     }
 
+    public boolean canAddMoreAccounts(){
+        return accountCount < MAX_ACCOUNTS;
+    }
+
     private static int generateId() {
         return nextCustomerNumber++;
     }
