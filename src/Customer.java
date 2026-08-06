@@ -9,7 +9,7 @@ public class Customer {
 
     private static int nextCustomerNumber = 0;
     private int accountCount;
-    private static final int MAX_ACCOUNTS = 10;
+    private static final int MAX_ACCOUNTS = 5;
 
 
     public Customer(String fullName, String nationalId, String phoneNumber, CustomerTiers customerTiers) {
@@ -20,11 +20,6 @@ public class Customer {
         customerId = generateId();
         accounts = new Account[MAX_ACCOUNTS];
     }
-
-    public Customer(String fullName, String nationalId, CustomerTiers customerTiers) {
-        this(fullName , nationalId, "-" ,customerTiers );
-    }
-
 
     private static int generateId() {
         return nextCustomerNumber++;
